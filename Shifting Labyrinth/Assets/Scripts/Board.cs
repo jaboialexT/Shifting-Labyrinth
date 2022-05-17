@@ -8,7 +8,9 @@ public class Board : MonoBehaviour
     public GameObject mCellPrefab,mArrowPrefab;
     public Sprite straight,t,corner;
     public Cell[,] mAllCells = new Cell[8, 8];
-
+    public Canvas parent;
+    public Arrow[,] mAllArrows = new Arrow[3, 4];
+    private int arrowXCount = 0, arrowYCount = 0;
     public void Create()
     {
         #region Extra Tile
@@ -30,6 +32,7 @@ public class Board : MonoBehaviour
                 break;
 
         }
+        newCell.transform.SetParent(parent.transform);
         #endregion
 
         for (int y = 0 ; y < 7 ;  y++)
@@ -60,23 +63,31 @@ public class Board : MonoBehaviour
             }
         }
 
-        for(int y = 1; y < 7; y += 2)
+        for(int y = 1; y < 7; y +=2)
         {
             GameObject newArrow = Instantiate(mArrowPrefab, transform);
+            mAllArrows[arrowYCount , 0] = newArrow.GetComponent<Arrow>();
             GameObject secArrow = Instantiate(mArrowPrefab, transform);
+            mAllArrows[arrowYCount, 1] = secArrow.GetComponent<Arrow>();
             RectTransform Arrowtransform = newArrow.GetComponent<RectTransform>();
             RectTransform secArrowtransform = secArrow.GetComponent<RectTransform>();
 
-            Arrowtransform.anchoredPosition = new Vector2(-50,(y*100)+50);
+            Arrowtransform.anchoredPosition = new Vector2(-50,((y)*100)+50);
             Arrowtransform.rotation = Quaternion.Euler(0, 0, 0);
-            secArrowtransform.anchoredPosition = new Vector2(750,(y*100)+50);
+            secArrowtransform.anchoredPosition = new Vector2(750,((y)*100)+50);
             secArrowtransform.rotation = Quaternion.Euler(0, 0, 180);
+
+            mAllArrows[arrowYCount, 0].Setup(new Vector2Int(0, y), this);
+            mAllArrows[arrowYCount, 1].Setup(new Vector2Int(1, y), this);
+            arrowYCount++;
         }
         
-        for (int x = 1; x < 7; x += 2)
+        for (int x = 1; x < 7; x +=2)
         {
             GameObject newArrow = Instantiate(mArrowPrefab, transform);
+            mAllArrows[arrowXCount, 2] = newArrow.GetComponent<Arrow>();
             GameObject secArrow = Instantiate(mArrowPrefab, transform);
+            mAllArrows[arrowXCount, 3] = newArrow.GetComponent<Arrow>();
             RectTransform Arrowtransform = newArrow.GetComponent<RectTransform>();
             RectTransform secArrowtransform = secArrow.GetComponent<RectTransform>();
 
@@ -84,6 +95,10 @@ public class Board : MonoBehaviour
             Arrowtransform.rotation = Quaternion.Euler(0, 0, 90);
             secArrowtransform.anchoredPosition = new Vector2((x * 100) + 50, 750);
             secArrowtransform.rotation = Quaternion.Euler(0, 0, 270);
+
+            mAllArrows[arrowXCount, 2].Setup(new Vector2Int(x, 2), this);
+            mAllArrows[arrowXCount, 3].Setup(new Vector2Int(x, 3), this);
+            arrowXCount++;
         }
 
 
