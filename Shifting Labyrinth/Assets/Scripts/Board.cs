@@ -11,6 +11,7 @@ public class Board : MonoBehaviour
     public Canvas parent;
     public Arrow[,] mAllArrows = new Arrow[3, 4];
     private int arrowXCount = 0, arrowYCount = 0;
+    private float rotation;
     public void Create()
     {
         #region Extra Tile
@@ -44,8 +45,9 @@ public class Board : MonoBehaviour
                 rectTransform = newCell.GetComponent<RectTransform>();
                 rectTransform.anchoredPosition = new Vector2((x * 100) + 50, (y * 100) + 50);
                 rectTransform.rotation = Quaternion.Euler(0, 0, Random.Range(0,5)*90);
-               
+
                 mAllCells[x, y] = newCell.GetComponent<Cell>();
+                mAllCells[x,y].rotation = rectTransform.localEulerAngles.z;
                 mAllCells[x, y].Setup(new Vector2Int(x, y), this);
                 
                 switch (Random.Range(0, 3))
@@ -66,9 +68,11 @@ public class Board : MonoBehaviour
         for(int y = 1; y < 7; y +=2)
         {
             GameObject newArrow = Instantiate(mArrowPrefab, transform);
+            newArrow.name = y+"0";
             mAllArrows[arrowYCount , 0] = newArrow.GetComponent<Arrow>();
             GameObject secArrow = Instantiate(mArrowPrefab, transform);
             mAllArrows[arrowYCount, 1] = secArrow.GetComponent<Arrow>();
+            secArrow.name = y + "1";
             RectTransform Arrowtransform = newArrow.GetComponent<RectTransform>();
             RectTransform secArrowtransform = secArrow.GetComponent<RectTransform>();
 
@@ -85,8 +89,10 @@ public class Board : MonoBehaviour
         for (int x = 1; x < 7; x +=2)
         {
             GameObject newArrow = Instantiate(mArrowPrefab, transform);
+            newArrow.name = x + "2";
             mAllArrows[arrowXCount, 2] = newArrow.GetComponent<Arrow>();
             GameObject secArrow = Instantiate(mArrowPrefab, transform);
+            secArrow.name = x + "3";
             mAllArrows[arrowXCount, 3] = newArrow.GetComponent<Arrow>();
             RectTransform Arrowtransform = newArrow.GetComponent<RectTransform>();
             RectTransform secArrowtransform = secArrow.GetComponent<RectTransform>();
@@ -120,6 +126,19 @@ public class Board : MonoBehaviour
         mAllCells[0, 6].GetComponent<RectTransform>().rotation = Quaternion.Euler(0, 0, 180);
 
     }
-
-    
+    public void Display(Cell[,] allCells)
+    {
+        
+        for(int y = 0; y < 7; y++)
+        {
+            for(int x = 0; x < 7; x++)
+            {
+                RectTransform rectTransform = allCells[x,y].GetComponent<RectTransform>();
+                allCells[x, y].transform.SetParent(this.transform);
+                rectTransform.anchoredPosition = new Vector3((x * 100) + 50, (y * 100) + 50,allCells[x,y].rotation);
+            }
+        }
+        allCells[7,7].transform.SetParent(parent.transform);
+        allCells[7,7].GetComponent<RectTransform>().anchoredPosition = new Vector2((250), (450));
+    }
 }
