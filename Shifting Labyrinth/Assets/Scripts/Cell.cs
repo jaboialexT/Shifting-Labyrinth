@@ -46,7 +46,7 @@ public class Cell : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerUpHand
             }
             else
             {
-            mTargetArrow = null;
+                mTargetArrow = null;
             }
         }
     }
@@ -58,44 +58,9 @@ public class Cell : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerUpHand
         if(mTargetArrow != null)
         {
             Debug.Log(mTargetArrow+" clicked!");
-            
-            //moves cells across the array
-            switch (mTargetArrow.name)
-            {
-                case ("10"):
-                    tempCell = mBoard.mAllCells[0, 1];
-                    mBoard.mAllCells[0,1] = mBoard.mAllCells[7,7];
-                    for (int i = 1; i < 7 ; i++)
-                    {
-                        mBoard.mAllCells[7, 7] = mBoard.mAllCells[i, 1];
-                        mBoard.mAllCells[i, 1] = tempCell;
-                        tempCell = mBoard.mAllCells[7,7];
-                    }
-                    break;
-                case ("30"):
-                    break;
-                case ("50"):
-                    break;
-                case ("11"):
-                    break;
-                case ("31"):
-                    break;
-                case ("51"):
-                    break;
-                case ("12"):
-                    break;
-                case ("32"):
-                    break;
-                case ("52"):
-                    break;
-                case ("13"):
-                    break;
-                case ("33"):
-                    break;
-                case ("53"):
-                    break;
-            }
 
+            //moves cells across the array
+            mTargetArrow.displace();       
             //displace cell from array
             mBoard.Display(mBoard.mAllCells);
             //make all arrows visible
